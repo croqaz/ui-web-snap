@@ -4,6 +4,7 @@
   "description": "Create perfect snapshots of web pages",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "main": "lib/main.js",
   "keywords": [
     "web-archiving",
     "web-archives",
@@ -21,8 +22,11 @@
   },
   "dependencies": {
     "bootstrap": "5.2.1",
-    "electron": "20.1.4",
     "html-minifier-terser": "7.0.0",
     "playwright": "1.26.0"
+  },
+  "devDependencies": {
+    "electron": "20.1.4",
+    "electron-builder": "23.3.3"
   }
 }
