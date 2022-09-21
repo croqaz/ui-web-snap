@@ -4,30 +4,45 @@ window.addEventListener('DOMContentLoaded', function () {
     let resourcesTotal = 0;
     const mainButton = document.getElementById('btn');
     const inputURL = document.getElementById('inputURL');
+    const inputAddon = document.getElementById('inputAddon');
+    const restoreFile = document.getElementById('restoreFile');
 
     // from UI to server
     //
     contextBridge.exposeInMainWorld('electronAPI', {
         recordUrl: (opts) => {
             resourcesTotal = 0;
-            mainButton.innerHTML = '... &nbsp;<span id="resCount" class="badge bg-danger">0</span>';
-            mainButton.disabled = true;
+            inputAddon.classList.remove('d-none');
+            mainButton.classList.remove('btn-primary');
+            mainButton.classList.add('btn-danger');
+            mainButton.innerHTML = 'Abort';
             inputURL.disabled = true;
             ipcRenderer.send('record-url', opts);
         },
+        restoreSnap: (opts) => {
+            restoreFile.disabled = true;
+            ipcRenderer.send('restore-snap', opts);
+        },
+        openDialog: (opts) => ipcRenderer.invoke('show-open-dialog', opts),
     });
 
     // from server to UI
     //
     ipcRenderer.on('record-resource-type', (_ev, resourceType) => {
         resourcesTotal += 1;
-        document.getElementById('resCount').innerHTML = resourcesTotal.toString();
+        inputAddon.innerText = resourcesTotal.toString();
         console.log('Res:', resourceType);
     });
 
     ipcRenderer.on('record-finished', () => {
+        inputAddon.classList.add('d-none');
+        mainButton.classList.remove('btn-danger');
+        mainButton.classList.add('btn-primary');
         mainButton.innerHTML = 'Record';
-        mainButton.disabled = false;
         inputURL.disabled = false;
+    });
+
+    ipcRenderer.on('restore-finished', () => {
+        restoreFile.disabled = false;
     });
 });

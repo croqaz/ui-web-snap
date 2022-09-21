@@ -27,4 +27,22 @@ window.addEventListener('load', function () {
             extraMeta: inputMetas.checked,
         });
     });
+
+    const restoreBtn = document.getElementById('restoreBtn');
+    const restoreFile = document.getElementById('restoreFile');
+
+    const selectRestoreFile = async (ev) => {
+        ev.preventDefault();
+        const { canceled, filePaths } = await window.electronAPI.openDialog();
+        console.log(canceled, filePaths);
+        if (!canceled && filePaths.length) {
+            restoreFile.value = filePaths[0];
+            window.electronAPI.restoreSnap({ input: filePaths[0] });
+        }
+    };
+    restoreBtn.addEventListener('click', selectRestoreFile);
+    restoreFile.addEventListener('click', selectRestoreFile);
+
+    // enable all tooltips
+    Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map((el) => new bootstrap.Tooltip(el));
 });

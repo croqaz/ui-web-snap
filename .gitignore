@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Snapshot files
+snap*.json
+snap*.json.gz
