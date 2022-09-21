@@ -1,0 +1,23 @@
+{
+  "name": "ui-web-snap",
+  "author": "Cristi Constantin <git@cristi.email>",
+  "description": "Create perfect snapshots of web pages",
+  "keywords": [
+    "web-archiving",
+    "web-archives",
+    "capture-page"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/croqaz/ui-web-snap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/croqaz/ui-web-snap/issues"
+  },
+  "dependencies": {
+    "electron": "20.1.4",
+    "playwright": "1.26.0"
+  },
+  "version": "0.1.0",
+  "license": "Apache-2.0"
+}
