@@ -30,14 +30,21 @@ window.addEventListener('load', function () {
 
     const restoreBtn = document.getElementById('restoreBtn');
     const restoreFile = document.getElementById('restoreFile');
+    const iRestoreJS = document.getElementById('iRestoreJS');
+    const iRestoreOff = document.getElementById('iRestoreOffline');
+    const iRestoreWait = document.getElementById('iRestoreWait');
 
     const selectRestoreFile = async (ev) => {
         ev.preventDefault();
         const { canceled, filePaths } = await window.electronAPI.openDialog();
-        console.log(canceled, filePaths);
         if (!canceled && filePaths.length) {
             restoreFile.value = filePaths[0];
-            window.electronAPI.restoreSnap({ input: filePaths[0] });
+            window.electronAPI.restoreSnap({
+                input: filePaths[0],
+                js: iRestoreJS.checked,
+                offline: iRestoreOff.checked,
+                wait: parseInt(iRestoreWait.value),
+            });
         }
     };
     restoreBtn.addEventListener('click', selectRestoreFile);
