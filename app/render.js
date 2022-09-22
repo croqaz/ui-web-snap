@@ -1,4 +1,4 @@
-window.addEventListener('load', function () {
+window.addEventListener('load', async function () {
     const mainButton = document.getElementById('btn');
     const inputURL = document.getElementById('inputURL');
     const inputWait = document.getElementById('inputWait');
@@ -50,6 +50,20 @@ window.addEventListener('load', function () {
     restoreBtn.addEventListener('click', selectRestoreFile);
     restoreFile.addEventListener('click', selectRestoreFile);
 
+    // restore last active tab from config
+    const activeTab = (await window.electronAPI.getStoreValue('activeTab')) || 'record-body';
+    for (const el of document.querySelectorAll('button[data-bs-toggle="tab"]')) {
+        if (el.id === activeTab) {
+            new bootstrap.Tab(el).show();
+        }
+        // save active tab on changing value
+        el.addEventListener('shown.bs.tab', async (ev) => {
+            await window.electronAPI.setStoreValue('activeTab', ev.target.id);
+        });
+    }
+
     // enable all tooltips
-    Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map((el) => new bootstrap.Tooltip(el));
+    for (const el of document.querySelectorAll('span[data-bs-toggle="tooltip"]')) {
+        new bootstrap.Tooltip(el);
+    }
 });

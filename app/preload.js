@@ -23,6 +23,8 @@ window.addEventListener('DOMContentLoaded', function () {
             restoreFile.disabled = true;
             ipcRenderer.send('restore-snap', opts);
         },
+        getStoreValue: (k) => ipcRenderer.invoke('get-store-value', k),
+        setStoreValue: (k, v) => ipcRenderer.invoke('set-store-value', k, v),
         openDialog: (opts) => ipcRenderer.invoke('show-open-dialog', opts),
     });
 
