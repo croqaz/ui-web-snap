@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Web-snap</title>
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    @media (min-width:768px) {
+      .col-md-30 {
+        flex: 0 0 auto;
+        width: 20%;
+      }
+    }
+    </style>
   </head>
   <body>
     <main class="container">
@@ -34,33 +42,33 @@
             </div>
           </div>
           <div class="row mt-4">
-            <div class="col-md-2">
+            <div class="col-md-30">
               <label class="form-label" for="inputWait">Wait (sec)</label>
               <input type="number" min="1" max="60" class="form-control" id="inputWait" value="5" style="max-width:4rem">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-30">
               <label class="form-label" for="inputTimeout">Timeout (sec)</label>
               <input type="number" min="1" max="60" class="form-control" id="inputTimeout" value="15" style="max-width:4rem">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-30">
               <label class="form-label" for="inputImgTime">IMG timeout</label>
               <input type="number" min="1" max="60" class="form-control" id="inputImgTime" value="15" style="max-width:4rem">
             </div>
           </div>
           <div class="row mt-4">
-            <div class="col-md-2">
+            <div class="col-md-30">
               <div class="form-check">
                 <label class="form-label" for="inputJS"><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on record?">JS on</span></label>
                 <input type="checkbox" class="form-check-input" id="inputJS" checked>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-30">
               <div class="form-check">
                 <label class="form-label" for="inputHeadless"><span data-bs-toggle="tooltip" data-bs-title="Hide the browser? (this can have negative impact, eg: websites can treat you like a Bot)">Headless</span></label>
                 <input type="checkbox" class="form-check-input" id="inputHeadless">
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-30">
               <div class="form-check">
                 <label class="form-label" for="inputIframes"><span data-bs-toggle="tooltip" data-bs-title="Capture iframes? (this can have negative impact, eg: capture Ads)">Iframes</span></label>
                 <input type="checkbox" class="form-check-input" id="inputIframes">
@@ -68,23 +76,28 @@
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-md-2">
+            <div class="col-md-30">
               <div class="form-check">
                 <label class="form-label" for="inputGzip"><span data-bs-toggle="tooltip" data-bs-title="Compress snapshot with GZIP?">GZIP</span></label>
                 <input type="checkbox" class="form-check-input" id="inputGzip">
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-30">
               <div class="form-check">
-                <label class="form-label" for="inputMinify"><span data-bs-toggle="tooltip" data-bs-title="Minify final HTML?">Minify</span></label>
+                <label class="form-label" for="inputMinify"><span data-bs-toggle="tooltip" data-bs-title="Minify final HTML?">Min HTML</span></label>
                 <input type="checkbox" class="form-check-input" id="inputMinify">
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-30">
               <div class="form-check">
                 <label class="form-label" for="inputMetas"><span data-bs-toggle="tooltip" data-bs-title="Extra metadata inside the snapshot?">Extra meta</span></label>
                 <input type="checkbox" class="form-check-input" id="inputMetas">
               </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col">
+              <textarea id="recordLog" class="form-control d-none" aria-label="Recording log"></textarea>
             </div>
           </div>
         </div>
@@ -121,10 +134,17 @@
         </div>
 
         <div class="tab-pane fade mt-4" id="stats-body" role="tabpanel" aria-labelledby="stats-tab">
-          <p>NOT IMPLEMENTED YET!<br>View snapshot stats, numbers and charts</p>
-          <div class="input-group">
-            <button id="statsBtn" class="btn btn-secondary" type="button">Browse...</button>
-            <input id="statsFile" class="form-control form-control-lg" type="text" placeholder="Select a snapshot file to view" aria-describedby="statsBtn" required>
+          <p>NOT FINISHED YET!<br>View snapshot stats, numbers and charts</p>
+          <div class="row">
+            <div class="col">
+              <div class="input-group">
+                <button id="statsBtn" class="btn btn-secondary" type="button">Browse...</button>
+                <input id="statsFile" class="form-control form-control-lg" type="text" placeholder="Select a snapshot file to view" aria-describedby="statsBtn" required>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <ul id="snapStats" class="list-group list-group-flush"></ul>
           </div>
         </div>
       </div>

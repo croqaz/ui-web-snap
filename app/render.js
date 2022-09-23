@@ -38,7 +38,8 @@ window.addEventListener('load', async function () {
         ev.preventDefault();
         const { canceled, filePaths } = await window.electronAPI.openDialog();
         if (!canceled && filePaths.length) {
-            restoreFile.value = filePaths[0];
+            const txtInput = ev.target.parentElement.querySelector('input[type="text"]');
+            txtInput.value = filePaths[0];
             window.electronAPI.restoreSnap({
                 input: filePaths[0],
                 js: iRestoreJS.checked,
@@ -47,8 +48,37 @@ window.addEventListener('load', async function () {
             });
         }
     };
+
     restoreBtn.addEventListener('click', selectRestoreFile);
     restoreFile.addEventListener('click', selectRestoreFile);
+
+    const statsBtn = document.getElementById('statsBtn');
+    const statsFile = document.getElementById('statsFile');
+    const snapStats = document.getElementById('snapStats');
+
+    const selectStatsFile = async (ev) => {
+        ev.preventDefault();
+        const { canceled, filePaths } = await window.electronAPI.openDialog();
+        if (canceled || !filePaths.length) {
+            return;
+        }
+        const txtInput = ev.target.parentElement.querySelector('input[type="text"]');
+        txtInput.value = filePaths[0];
+        const snap = await window.electronAPI.snapStats({ input: filePaths[0] });
+        console.log('SNAP', snap);
+        let html = '';
+        html += `<li class="list-group-item">User URL: <a href="${snap.url}">${snap.url}</a></li>`;
+        if (snap.base_url)
+            html += `<li class="list-group-item">Base URL: <a href="${snap.base_url}">${snap.base_url}</a></li>`;
+        if (snap.title) html += `<li class="list-group-item">Title: ${snap.title}</li>`;
+        if (snap.date) html += `<li class="list-group-item">Date: ${snap.date}</li>`;
+        html += `<li class="list-group-item">HTML body size: ${snap.html}</li>`;
+        html += `<li class="list-group-item">No of resources: ${Object.keys(snap.responses).length}</li>`;
+        snapStats.innerHTML = html;
+    };
+
+    statsBtn.addEventListener('click', selectStatsFile);
+    statsFile.addEventListener('click', selectStatsFile);
 
     // restore last active tab from config
     const activeTab = (await window.electronAPI.getStoreValue('activeTab')) || 'record-body';
