@@ -13,7 +13,15 @@ window.addEventListener('load', async function () {
 
     mainButton.addEventListener('click', () => {
         const url = inputURL.value.trim();
-        if (!url || url.length < 4) return;
+        if (mainButton.innerText === 'Abort') {
+            window.electronAPI.abortRecord();
+            return;
+        }
+        if (!url || !/^https?:\/\/[^ "]+\./.test(url)) {
+            inputURL.classList.add('is-invalid');
+            return;
+        };
+        inputURL.classList.remove('is-invalid');
         window.electronAPI.recordUrl({
             url,
             wait: parseInt(inputWait1.value),

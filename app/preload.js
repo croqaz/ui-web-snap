@@ -2,9 +2,11 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 window.addEventListener('DOMContentLoaded', function () {
     let resourcesTotal = 0;
+    let recordSteps = '';
     const mainButton = document.getElementById('btn');
     const inputURL = document.getElementById('inputURL');
     const inputAddon = document.getElementById('inputAddon');
+    const recordLog = document.getElementById('recordLog');
     const restoreFile = document.getElementById('restoreFile');
 
     // from UI to server
@@ -12,6 +14,8 @@ window.addEventListener('DOMContentLoaded', function () {
     contextBridge.exposeInMainWorld('electronAPI', {
         recordUrl: (opts) => {
             resourcesTotal = 0;
+            recordSteps = '';
+            recordLog.classList.remove('d-none');
             inputAddon.classList.remove('d-none');
             mainButton.classList.remove('btn-primary');
             mainButton.classList.add('btn-danger');
@@ -23,6 +27,7 @@ window.addEventListener('DOMContentLoaded', function () {
             restoreFile.disabled = true;
             ipcRenderer.send('restore-snap', opts);
         },
+        abortRecord: () => ipcRenderer.send('abort-record'),
         snapStats: (opts) => ipcRenderer.invoke('snap-stats', opts),
         getStoreValue: (k) => ipcRenderer.invoke('get-store-value', k),
         setStoreValue: (k, v) => ipcRenderer.invoke('set-store-value', k, v),
@@ -34,7 +39,13 @@ window.addEventListener('DOMContentLoaded', function () {
     ipcRenderer.on('record-resource-type', (_ev, resourceType) => {
         resourcesTotal += 1;
         inputAddon.innerText = resourcesTotal.toString();
-        console.log('Res:', resourceType);
+        console.log('RES:', resourceType);
+    });
+
+    ipcRenderer.on('record-step', (_ev, step) => {
+        recordSteps += (step + '\n');
+        recordLog.innerHTML = recordSteps;
+        console.log('STEP:', step)
     });
 
     ipcRenderer.on('record-finished', () => {
