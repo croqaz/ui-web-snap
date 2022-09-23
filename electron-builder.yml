@@ -1,0 +1,22 @@
+copyright: Copyright © 2022
+
+linux:
+   target:
+     - target: AppImage
+       arch:
+         - x64
+
+files:
+  filter:
+    - "**/*"
+    - "!node_modules/*/{CHANGELOG*,History*,README*,readme*,LICENSE*,license*,Copyright*}"
+    - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+    - "!**/node_modules/**/{*.ts,*.ts.map,*.js.map,*.mjs.map,*.scss,*.css.map}"
+    - "!**/node_modules/.bin"
+    - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+    - "!**/snap*.{json,json.gz}"
+    - "!node_modules/playwright-core/bin"
+    - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}"
+    - "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output,.log}"
+    - "!**/{appveyor.yml,.travis.yml,circle.yml,.eslintrc.*}"
+    - "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"

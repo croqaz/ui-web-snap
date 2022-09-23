@@ -21,13 +21,13 @@
     "start": "electron --ignore-certificate-errors lib/main.js"
   },
   "dependencies": {
-    "bootstrap": "5.2.x"
+    "bootstrap": "5.2.x",
+    "electron-store": "8.1.x",
+    "html-minifier-terser": "7.0.0",
+    "playwright": "1.26.0"
   },
   "devDependencies": {
     "electron": "20.1.x",
-    "electron-builder": "23.3.x",
-    "electron-store": "8.1.x",
-    "html-minifier-terser": "7.0.x",
-    "playwright": "1.26.x"
+    "electron-builder": "23.3.x"
   }
 }
