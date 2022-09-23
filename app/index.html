@@ -43,8 +43,8 @@
           </div>
           <div class="row mt-4">
             <div class="col-md-30">
-              <label class="form-label" for="inputWait">Wait (sec)</label>
-              <input type="number" min="1" max="60" class="form-control" id="inputWait" value="5" style="max-width:4rem">
+              <label class="form-label" for="inputWait1">Wait (sec)</label>
+              <input type="number" min="1" max="60" class="form-control" id="inputWait1" value="5" style="max-width:4rem">
             </div>
             <div class="col-md-30">
               <label class="form-label" for="inputTimeout">Timeout (sec)</label>
@@ -58,8 +58,8 @@
           <div class="row mt-4">
             <div class="col-md-30">
               <div class="form-check">
-                <label class="form-label" for="inputJS"><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on record?">JS on</span></label>
-                <input type="checkbox" class="form-check-input" id="inputJS" checked>
+                <label class="form-label" for="inputJS1"><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on record?">JS on</span></label>
+                <input type="checkbox" class="form-check-input" id="inputJS1" checked>
               </div>
             </div>
             <div class="col-md-30">
@@ -115,26 +115,26 @@
           <div class="row mt-4">
             <div class="col-md-2">
               <div class="form-check">
-                <label class="form-label" for="iRestoreJS"><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on restore?">JS on</span></label>
-                <input type="checkbox" class="form-check-input" id="iRestoreJS" checked>
+                <label class="form-label" for="inputJS2"><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on restore?">JS on</span></label>
+                <input type="checkbox" class="form-check-input" id="inputJS2" checked>
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-check">
-                <label class="form-label" for="iRestoreOffline"><span data-bs-toggle="tooltip"
+                <label class="form-label" for="inputOffline"><span data-bs-toggle="tooltip"
                   data-bs-title="Restore offline?">Offline</span></label>
-                <input type="checkbox" class="form-check-input" id="iRestoreOffline" checked>
+                <input type="checkbox" class="form-check-input" id="inputOffline" checked>
               </div>
             </div>
             <div class="col-md-2" style="width:6.2rem">
-              <input type="number" min="10" max="960" class="form-control" id="iRestoreWait" value="120">
-              <label class="form-label" for="iRestoreWait" style="margin-left:4px">Wait (sec)</label>
+              <input type="number" min="10" max="960" class="form-control" id="inputWait2" value="120">
+              <label class="form-label" for="inputWait2" style="margin-left:4px">Wait (sec)</label>
             </div>
           </div>
         </div>
 
         <div class="tab-pane fade mt-4" id="stats-body" role="tabpanel" aria-labelledby="stats-tab">
-          <p>NOT FINISHED YET!<br>View snapshot stats, numbers and charts</p>
+          <p>View snapshot stats, numbers and charts</p>
           <div class="row">
             <div class="col">
               <div class="input-group">
@@ -146,6 +146,15 @@
           <div class="row mt-4">
             <ul id="snapStats" class="list-group list-group-flush"></ul>
           </div>
+          <div class="mt-2 d-none">
+            <h4>Top resources by size</h4>
+            <div id="resBySize"></div>
+          </div>
+          <div class="my-4 d-none">
+            <h4>Resources by type</h4>
+            <div id="resByType"></div>
+          </div>
+          <br>
         </div>
       </div>
     </main>
