@@ -27,11 +27,13 @@
     "html-minifier-next": "5.x",
     "html-minifier-terser": "7.x",
     "lightningcss": "1.32.0",
-    "playwright": "1.58.x"
+    "playwright": "1.58.x",
+    "purgecss": "8.x"
   },
   "devDependencies": {
     "ava": "7.x",
     "electron": "41.x",
-    "electron-builder": "26.x"
+    "electron-builder": "26.x",
+    "express": "5.x"
   }
 }

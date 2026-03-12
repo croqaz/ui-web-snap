@@ -1,164 +1,406 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Web-snap</title>
-    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-    @media (min-width:768px) {
-      .col-md-30 {
-        flex: 0 0 auto;
-        width: 20%;
-      }
-    }
-    </style>
-  </head>
-  <body>
-    <main class="container">
-      <div class="row my-4">
-        <h2 class="display-5 fw-bold align-middle">Web-snap <small class="align-middle">😼</small></h2>
-      </div>
-      <ul class="nav nav-tabs" id="tabList" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button id="record-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#record-body" type="button" role="tab" aria-controls="record-body" aria-selected="true">Record</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button id="restore-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#restore-body" type="button" role="tab" aria-controls="restore-body" aria-selected="false">Restore</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button id="stats-tab" class="nav-link" data-bs-toggle="tab" data-bs-target="#stats-body" type="button" role="tab" aria-controls="stats-body" aria-selected="false">Stats</button>
-        </li>
-      </ul>
-      <div class="tab-content" id="tabContent">
-        <div class="tab-pane fade mt-4" id="record-body" role="tabpanel" aria-labelledby="record-tab">
-          <div class="row">
-            <div class="col">
-              <div class="input-group">
-                <input type="text" id="inputURL" class="form-control form-control-lg" placeholder="Input URL" aria-label="Input URL" aria-describedby="btn" required>
-                <span class="d-none input-group-text bg-info border-info" id="inputAddon">0</span>
-                <button id="btn" class="btn btn-primary" type="button">Record</button>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-4">
-            <div class="col-md-30">
-              <label class="form-label" for="inputWait1">Wait (sec)</label>
-              <input type="number" min="1" max="60" class="form-control" id="inputWait1" value="5" style="max-width:4rem">
-            </div>
-            <div class="col-md-30">
-              <label class="form-label" for="inputTimeout">Timeout (sec)</label>
-              <input type="number" min="1" max="60" class="form-control" id="inputTimeout" value="15" style="max-width:4rem">
-            </div>
-            <div class="col-md-30">
-              <label class="form-label" for="inputImgTime">IMG timeout</label>
-              <input type="number" min="1" max="60" class="form-control" id="inputImgTime" value="15" style="max-width:4rem">
-            </div>
-          </div>
-          <div class="row mt-4">
-            <div class="col-md-30">
-              <div class="form-check">
-                <label class="form-label" for="inputJS1"><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on record?">JS on</span></label>
-                <input type="checkbox" class="form-check-input" id="inputJS1" checked>
-              </div>
-            </div>
-            <div class="col-md-30">
-              <div class="form-check">
-                <label class="form-label" for="inputHeadless"><span data-bs-toggle="tooltip" data-bs-title="Hide the browser? (this can have negative impact, eg: websites can treat you like a Bot)">Headless</span></label>
-                <input type="checkbox" class="form-check-input" id="inputHeadless">
-              </div>
-            </div>
-            <div class="col-md-30">
-              <div class="form-check">
-                <label class="form-label" for="inputIframes"><span data-bs-toggle="tooltip" data-bs-title="Capture iframes? (this can have negative impact, eg: capture Ads)">Iframes</span></label>
-                <input type="checkbox" class="form-check-input" id="inputIframes">
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-30">
-              <div class="form-check">
-                <label class="form-label" for="inputGzip"><span data-bs-toggle="tooltip" data-bs-title="Compress snapshot with GZIP?">GZIP</span></label>
-                <input type="checkbox" class="form-check-input" id="inputGzip">
-              </div>
-            </div>
-            <div class="col-md-30">
-              <div class="form-check">
-                <label class="form-label" for="inputMinify"><span data-bs-toggle="tooltip" data-bs-title="Minify final HTML?">Min HTML</span></label>
-                <input type="checkbox" class="form-check-input" id="inputMinify">
-              </div>
-            </div>
-            <div class="col-md-30">
-              <div class="form-check">
-                <label class="form-label" for="inputMetas"><span data-bs-toggle="tooltip" data-bs-title="Extra metadata inside the snapshot?">Extra meta</span></label>
-                <input type="checkbox" class="form-check-input" id="inputMetas">
-              </div>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col">
-              <pre id="recordLog" class="form-control d-none" aria-label="Recording log"></pre>
-            </div>
-          </div>
-        </div>
+<!doctype html>
+<html data-bs-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Web-snap</title>
+        <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <style>
+            :root {
+                --ws-accent: #4361ee;
+                --ws-bg: #fafafa;
+                --ws-card: #fff;
+                --ws-border: #e5e7eb;
+                --ws-muted: #6b7280;
+            }
+            body {
+                background: var(--ws-bg);
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    'Segoe UI',
+                    Roboto,
+                    sans-serif;
+                font-size: 0.9375rem;
+                color: #1f2937;
+                -webkit-font-smoothing: antialiased;
+            }
+            h1 {
+                font-weight: 700;
+                font-size: 1.75rem;
+                letter-spacing: -0.02em;
+            }
+            h1 small {
+                font-size: 1.5rem;
+                vertical-align: middle;
+            }
+            .nav-tabs {
+                border-bottom: 2px solid var(--ws-border);
+                gap: 0.25rem;
+            }
+            .nav-tabs .nav-link {
+                font-weight: 500;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                color: var(--ws-muted);
+                border: none;
+                border-bottom: 2px solid transparent;
+                padding: 0.5rem 1rem;
+                margin-bottom: -2px;
+                transition:
+                    color 0.15s,
+                    border-color 0.15s;
+            }
+            .nav-tabs .nav-link:hover {
+                color: #1f2937;
+            }
+            .nav-tabs .nav-link.active {
+                color: var(--ws-accent);
+                border-bottom-color: var(--ws-accent);
+                background: transparent;
+            }
+            .form-control,
+            .form-select {
+                font-size: 0.875rem;
+                border-color: var(--ws-border);
+                border-radius: 0.375rem;
+            }
+            .form-control:focus {
+                border-color: var(--ws-accent);
+                box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.15);
+            }
+            .form-control-lg {
+                font-size: 0.9375rem;
+                padding: 0.5rem 0.75rem;
+            }
+            .form-label {
+                font-size: 0.8125rem;
+                font-weight: 500;
+                color: var(--ws-muted);
+                margin-bottom: 0.25rem;
+            }
+            .form-check {
+                padding-left: 0;
+            }
+            .form-check .form-check-input {
+                margin-left: 0;
+                margin-right: 0.5rem;
+                vertical-align: middle;
+            }
+            .form-check .form-label {
+                display: inline;
+                margin-bottom: 0;
+                vertical-align: middle;
+            }
+            .btn {
+                font-size: 0.875rem;
+                font-weight: 500;
+                border-radius: 0.375rem;
+                padding: 0.45rem 1.1rem;
+            }
+            .btn-primary {
+                background: var(--ws-accent);
+                border-color: var(--ws-accent);
+            }
+            .btn-primary:hover {
+                background: #3651d4;
+                border-color: #3651d4;
+            }
+            .btn-outline-secondary {
+                color: var(--ws-muted);
+                border-color: var(--ws-border);
+            }
+            .btn-outline-secondary:hover {
+                color: #1f2937;
+                background: #f3f4f6;
+                border-color: #d1d5db;
+            }
+            .section-label {
+                font-size: 0.75rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: var(--ws-muted);
+                margin-bottom: 0.75rem;
+            }
+            .tab-pane p {
+                font-size: 0.8125rem;
+                color: var(--ws-muted);
+                margin-bottom: 1rem;
+            }
+            .opts-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.75rem 1.5rem;
+            }
+            .num-input {
+                max-width: 4.5rem;
+            }
+            pre#recordLog {
+                font-size: 0.8125rem;
+                background: #f3f4f6;
+                border: 1px solid var(--ws-border);
+                border-radius: 0.375rem;
+                padding: 0.75rem;
+            }
+            .list-group-item {
+                font-size: 0.8125rem;
+                border-color: var(--ws-border);
+                padding: 0.5rem 0;
+                background: transparent;
+            }
+            .list-group-item a {
+                color: var(--ws-accent);
+                text-decoration: none;
+            }
+            .list-group-item a:hover {
+                text-decoration: underline;
+            }
+            h4 {
+                font-size: 0.9375rem;
+                font-weight: 600;
+                letter-spacing: -0.01em;
+            }
+            .progress {
+                height: 0.375rem;
+                border-radius: 0.25rem;
+                background: #e5e7eb;
+            }
+            .progress-bar {
+                background: var(--ws-accent);
+                border-radius: 0.25rem;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container" style="max-width: 720px">
+            <header class="pt-4 pb-3">
+                <h1>Web-snap <small>😼</small></h1>
+            </header>
 
-        <div class="tab-pane fade my-4" id="restore-body" role="tabpanel" aria-labelledby="restore-tab">
-          <p>View a snapshot file in a new browser window</p>
-          <div class="row">
-            <div class="col">
-              <div class="input-group">
-                <button id="restoreBtn" class="btn btn-secondary" type="button">Browse...</button>
-                <input id="restoreFile" class="form-control form-control-lg" type="text" placeholder="Select a snapshot file to view" aria-describedby="restoreBtn" required>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-4">
-            <div class="col-md-2">
-              <div class="form-check">
-                <label class="form-label" for="inputJS2"><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on restore?">JS on</span></label>
-                <input type="checkbox" class="form-check-input" id="inputJS2" checked>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <div class="form-check">
-                <label class="form-label" for="inputOffline"><span data-bs-toggle="tooltip"
-                  data-bs-title="Restore offline?">Offline</span></label>
-                <input type="checkbox" class="form-check-input" id="inputOffline" checked>
-              </div>
-            </div>
-            <div class="col-md-2" style="width:6.2rem">
-              <input type="number" min="10" max="960" class="form-control" id="inputWait2" value="120">
-              <label class="form-label" for="inputWait2" style="margin-left:4px">Wait (sec)</label>
-            </div>
-          </div>
-        </div>
+            <ul class="nav nav-tabs" id="tabList" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button
+                        id="record-tab"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#record-body"
+                        type="button"
+                        role="tab"
+                        aria-controls="record-body"
+                        aria-selected="true"
+                    >
+                        Record
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button
+                        id="restore-tab"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#restore-body"
+                        type="button"
+                        role="tab"
+                        aria-controls="restore-body"
+                        aria-selected="false"
+                    >
+                        Restore
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button
+                        id="stats-tab"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#stats-body"
+                        type="button"
+                        role="tab"
+                        aria-controls="stats-body"
+                        aria-selected="false"
+                    >
+                        Stats
+                    </button>
+                </li>
+            </ul>
 
-        <div class="tab-pane fade mt-4" id="stats-body" role="tabpanel" aria-labelledby="stats-tab">
-          <p>View snapshot stats, numbers and charts</p>
-          <div class="row">
-            <div class="col">
-              <div class="input-group">
-                <button id="statsBtn" class="btn btn-secondary" type="button">Browse...</button>
-                <input id="statsFile" class="form-control form-control-lg" type="text" placeholder="Select a snapshot file to view" aria-describedby="statsBtn" required>
-              </div>
+            <div class="tab-content" id="tabContent">
+                <!-- RECORD -->
+                <div class="tab-pane fade pt-4" id="record-body" role="tabpanel" aria-labelledby="record-tab">
+                    <div class="input-group mb-4">
+                        <input
+                            type="text"
+                            id="inputURL"
+                            class="form-control form-control-lg"
+                            placeholder="https://example.com"
+                            aria-label="Input URL"
+                            aria-describedby="btn"
+                            required
+                        />
+                        <span class="d-none input-group-text bg-info border-info" id="inputAddon">0</span>
+                        <button id="btn" class="btn btn-primary" type="button">Record</button>
+                    </div>
+
+                    <div class="section-label">Timing</div>
+                    <div class="opts-grid mb-3">
+                        <div>
+                            <label class="form-label" for="inputWait1">Wait (sec)</label>
+                            <input
+                                type="number"
+                                min="1"
+                                max="60"
+                                class="form-control num-input"
+                                id="inputWait1"
+                                value="5"
+                            />
+                        </div>
+                        <div>
+                            <label class="form-label" for="inputTimeout">Timeout (sec)</label>
+                            <input
+                                type="number"
+                                min="1"
+                                max="60"
+                                class="form-control num-input"
+                                id="inputTimeout"
+                                value="15"
+                            />
+                        </div>
+                        <div>
+                            <label class="form-label" for="inputImgTime">IMG timeout</label>
+                            <input
+                                type="number"
+                                min="1"
+                                max="60"
+                                class="form-control num-input"
+                                id="inputImgTime"
+                                value="15"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="section-label">Options</div>
+                    <div class="opts-grid mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputJS1" checked />
+                            <label class="form-label" for="inputJS1"
+                                ><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on record?"
+                                    >JS on</span
+                                ></label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputHeadless" />
+                            <label class="form-label" for="inputHeadless"
+                                ><span
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="Hide the browser? (this can have negative impact, eg: websites can treat you like a Bot)"
+                                    >Headless</span
+                                ></label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputIframes" />
+                            <label class="form-label" for="inputIframes"
+                                ><span
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="Capture iframes? (this can have negative impact, eg: capture ADs)"
+                                    >Iframes</span
+                                ></label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputGzip" />
+                            <label class="form-label" for="inputGzip"
+                                ><span data-bs-toggle="tooltip" data-bs-title="Compress snapshot with GZIP?"
+                                    >GZIP</span
+                                ></label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputMinify" />
+                            <label class="form-label" for="inputMinify"
+                                ><span data-bs-toggle="tooltip" data-bs-title="Minify final HTML?"
+                                    >Min HTML</span
+                                ></label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputMetas" />
+                            <label class="form-label" for="inputMetas"
+                                ><span
+                                    data-bs-toggle="tooltip"
+                                    data-bs-title="Embed extra metadata inside the snapshot?"
+                                    >Extra meta</span
+                                ></label
+                            >
+                        </div>
+                    </div>
+
+                    <pre id="recordLog" class="form-control d-none" aria-label="Recording log"></pre>
+                </div>
+
+                <!-- RESTORE -->
+                <div class="tab-pane fade pt-4" id="restore-body" role="tabpanel" aria-labelledby="restore-tab">
+                    <p>View a snapshot file in a new browser window</p>
+                    <div class="input-group mb-4">
+                        <button id="restoreBtn" class="btn btn-outline-primary" type="button">Browse&hellip;</button>
+                        <input
+                            id="restoreFile"
+                            class="form-control form-control-lg"
+                            type="text"
+                            placeholder="Select a snapshot file"
+                            aria-describedby="restoreBtn"
+                            required
+                        />
+                    </div>
+
+                    <div class="section-label">Options</div>
+                    <div class="opts-grid">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputJS2" checked />
+                            <label class="form-label" for="inputJS2"
+                                ><span data-bs-toggle="tooltip" data-bs-title="Enable Javascript on restore?"
+                                    >JS on</span
+                                ></label
+                            >
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="inputOffline" checked />
+                            <label class="form-label" for="inputOffline"
+                                ><span data-bs-toggle="tooltip" data-bs-title="Restore offline?">Offline</span></label
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATS -->
+                <div class="tab-pane fade pt-4" id="stats-body" role="tabpanel" aria-labelledby="stats-tab">
+                    <p>View snapshot stats, numbers and charts</p>
+                    <div class="input-group mb-4">
+                        <button id="statsBtn" class="btn btn-outline-primary" type="button">Browse&hellip;</button>
+                        <input
+                            id="statsFile"
+                            class="form-control form-control-lg"
+                            type="text"
+                            placeholder="Select a snapshot file"
+                            aria-describedby="statsBtn"
+                            required
+                        />
+                    </div>
+
+                    <ul id="snapStats" class="list-group list-group-flush mb-3"></ul>
+                    <div class="mt-2 d-none">
+                        <h4>Top resources by size</h4>
+                        <div id="resBySize"></div>
+                    </div>
+                    <div class="my-4 d-none">
+                        <h4>Resources by type</h4>
+                        <div id="resByType"></div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="row mt-4">
-            <ul id="snapStats" class="list-group list-group-flush"></ul>
-          </div>
-          <div class="mt-2 d-none">
-            <h4>Top resources by size</h4>
-            <div id="resBySize"></div>
-          </div>
-          <div class="my-4 d-none">
-            <h4>Resources by type</h4>
-            <div id="resByType"></div>
-          </div>
-          <br>
-        </div>
-      </div>
-    </main>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
-    <script src="./render.js"></script>
-  </body>
+        </main>
+        <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="./render.js"></script>
+    </body>
 </html>
