@@ -7,6 +7,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const inputURL = document.getElementById('inputURL');
     const inputAddon = document.getElementById('inputAddon');
     const recordLog = document.getElementById('recordLog');
+    const restoreBtn = document.getElementById('restoreBtn');
     const restoreFile = document.getElementById('restoreFile');
 
     // from UI to server
@@ -25,6 +26,7 @@ window.addEventListener('DOMContentLoaded', function () {
         },
         restoreSnap: (opts) => {
             restoreFile.disabled = true;
+            restoreBtn.disabled = true;
             ipcRenderer.send('restore-snap', opts);
         },
         abortRecord: () => ipcRenderer.send('abort-record'),
@@ -43,9 +45,9 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
     ipcRenderer.on('record-step', (_ev, step) => {
-        recordSteps += (step + '\n');
+        recordSteps += step + '\n';
         recordLog.innerHTML = recordSteps;
-        console.log('STEP:', step)
+        console.log('STEP:', step);
     });
 
     ipcRenderer.on('record-finished', () => {
@@ -58,5 +60,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
     ipcRenderer.on('restore-finished', () => {
         restoreFile.disabled = false;
+        restoreBtn.disabled = false;
     });
 });

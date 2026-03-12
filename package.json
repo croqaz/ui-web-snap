@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "license": "Apache-2.0",
   "main": "lib/main.js",
+  "type": "module",
   "keywords": [
     "web-archiving",
     "web-archives",
@@ -21,13 +22,16 @@
     "start": "electron --ignore-certificate-errors lib/main.js"
   },
   "dependencies": {
-    "bootstrap": "5.2.x",
-    "electron-store": "8.1.x",
-    "html-minifier-terser": "7.0.0",
-    "playwright": "1.26.0"
+    "bootstrap": "5.3.x",
+    "electron-store": "11.x",
+    "html-minifier-next": "5.x",
+    "html-minifier-terser": "7.x",
+    "lightningcss": "1.32.0",
+    "playwright": "1.58.x"
   },
   "devDependencies": {
-    "electron": "20.1.x",
-    "electron-builder": "23.3.x"
+    "ava": "7.x",
+    "electron": "41.x",
+    "electron-builder": "26.x"
   }
 }

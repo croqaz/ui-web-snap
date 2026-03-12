@@ -20,7 +20,7 @@ window.addEventListener('load', async function () {
         if (!url || !/^https?:\/\/[^ "]+\./.test(url)) {
             inputURL.classList.add('is-invalid');
             return;
-        };
+        }
         inputURL.classList.remove('is-invalid');
         window.electronAPI.recordUrl({
             url,
@@ -39,7 +39,6 @@ window.addEventListener('load', async function () {
     const restoreBtn = document.getElementById('restoreBtn');
     const restoreFile = document.getElementById('restoreFile');
     const inputJS2 = document.getElementById('inputJS2');
-    const inputWait2 = document.getElementById('inputWait2');
     const inputOffline = document.getElementById('inputOffline');
 
     const selectRestoreFile = async (ev) => {
@@ -52,7 +51,6 @@ window.addEventListener('load', async function () {
                 input: filePaths[0],
                 js: inputJS2.checked,
                 offline: inputOffline.checked,
-                wait: parseInt(inputWait2.value),
             });
         }
     };
